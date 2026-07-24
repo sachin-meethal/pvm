@@ -1,0 +1,23 @@
+<nav class="navbar bg-white shadow-sm">
+
+    <div class="container-fluid">
+
+        <h4>PVM Restaurant ERP</h4>
+
+        <div>
+
+            Welcome,
+
+            <strong>{{ request.user.username }}</strong>
+
+            |
+
+            <a href="{% url 'accounts:logout' %}">
+                Logout
+            </a>
+
+        </div>
+
+    </div>
+
+</nav>

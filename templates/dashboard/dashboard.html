@@ -1,0 +1,49 @@
+{% extends "base/base.html" %}
+
+{% block title %}
+Dashboard
+{% endblock %}
+
+{% block content %}
+
+<div class="row">
+
+    <div class="col-md-3">
+        <div class="card shadow">
+            <div class="card-body">
+                <h5>Today's Sales</h5>
+                <h2>₹{{ today_sales }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card shadow">
+            <div class="card-body">
+                <h5>Orders</h5>
+                <h2>{{ orders }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card shadow">
+            <div class="card-body">
+                <h5>Employees</h5>
+                <h2>{{ employees }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card shadow">
+            <div class="card-body">
+                <h5>Purchase</h5>
+                <h2>₹{{ purchase }}</h2>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
