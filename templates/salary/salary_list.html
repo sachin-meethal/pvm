@@ -1,0 +1,136 @@
+{% extends "base/base.html" %}
+
+{% block title %}Staff Salary{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2>💰 Staff Salary</h2>
+        <p class="text-muted mb-0">Manage employee salaries and payments</p>
+    </div>
+
+    <a href="{% url 'add_salary' %}" class="btn btn-primary">
+        <i class="bi bi-plus-circle"></i> Add Salary
+    </a>
+</div>
+
+<div class="card shadow">
+    <div class="card-header bg-dark text-white">
+        <h5 class="mb-0">Salary History</h5>
+    </div>
+
+    <div class="card-body">
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover align-middle">
+
+                <thead class="table-light">
+                    <tr>
+                        <th>#</th>
+                        <th>Employee</th>
+                        <th>Month</th>
+                        <th>Type</th>
+                        <th>Basic Salary</th>
+                        <th>Overtime</th>
+                        <th>Advance</th>
+                        <th>Deduction</th>
+                        <th>Net Salary</th>
+                        <th>Status</th>
+                        <th>Payment Method</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                {% for salary in salaries %}
+
+                    <tr>
+
+                        <td>{{ forloop.counter }}</td>
+
+                        <td>
+                            <strong>
+                                {{ salary.employee.first_name }}
+                                {{ salary.employee.last_name }}
+                            </strong>
+                            <br>
+                            <small class="text-muted">
+                                {{ salary.employee.employee_id }}
+                            </small>
+                        </td>
+
+                        <td>
+                            {{ salary.salary_month|date:"F Y" }}
+                        </td>
+
+                        <td>
+                            {{ salary.salary_type }}
+                        </td>
+
+                        <td>
+                            ₹{{ salary.basic_salary }}
+                        </td>
+
+                        <td>
+                            ₹{{ salary.overtime_amount }}
+                        </td>
+
+                        <td>
+                            ₹{{ salary.advance }}
+                        </td>
+
+                        <td>
+                            ₹{{ salary.deduction }}
+                        </td>
+
+                        <td>
+                            <strong class="text-success">
+                                ₹{{ salary.net_salary }}
+                            </strong>
+                        </td>
+
+                        <td>
+                            {% if salary.payment_status == "Paid" %}
+                                <span class="badge bg-success">
+                                    Paid
+                                </span>
+                            {% else %}
+                                <span class="badge bg-warning text-dark">
+                                    Pending
+                                </span>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {{ salary.payment_method }}
+                        </td>
+
+                    </tr>
+
+                {% empty %}
+
+                    <tr>
+                        <td colspan="11" class="text-center py-4">
+                            <h5 class="text-muted">
+                                No salary records found
+                            </h5>
+
+                            <a href="{% url 'add_salary' %}"
+                               class="btn btn-primary mt-2">
+                                Add First Salary
+                            </a>
+                        </td>
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

@@ -9,17 +9,17 @@
     <!-- Left Side -->
     <div class="col-md-8">
 
-        <div class="card">
+        <div class="card shadow">
 
             <div class="card-header bg-primary text-white">
-                <h4>🍽 Menu</h4>
+                <h4 class="mb-0">🍽 Menu</h4>
             </div>
 
             <div class="card-body">
 
                 <div class="row">
 
-                {% for item in items %}
+                    {% for item in items %}
 
                     <div class="col-md-4 mb-3">
 
@@ -29,11 +29,10 @@
 
                                 <h5>{{ item.name }}</h5>
 
-                                <h4 class="text-success">
-                                    ₹{{ item.price }}
-                                </h4>
+                                <h4 class="text-success">₹{{ item.price }}</h4>
 
-                                <button class="btn btn-primary w-100">
+                                <button class="btn btn-primary w-100"
+                                    onclick="addItem({{ item.id }}, '{{ item.name|escapejs }}', {{ item.price }})">
                                     Add
                                 </button>
 
@@ -43,11 +42,15 @@
 
                     </div>
 
-                {% empty %}
+                    {% empty %}
 
-                    <p>No menu items found.</p>
+                    <div class="col-12">
+                        <div class="alert alert-warning text-center">
+                            No menu items found.
+                        </div>
+                    </div>
 
-                {% endfor %}
+                    {% endfor %}
 
                 </div>
 
@@ -61,26 +64,40 @@
 
     <div class="col-md-4">
 
-        <div class="card">
+        <div class="card shadow">
 
             <div class="card-header bg-success text-white">
-
-                <h4>🧾 Current Bill</h4>
-
+                <h4 class="mb-0">🧾 Current Bill</h4>
             </div>
 
             <div class="card-body">
+                <div class="mb-3">
+                    <label class="form-label">Customer Name</label>
+                    <input type="text" class="form-control" id="customer-name" placeholder="Walk-in Customer">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Payment</label>
 
-                <p>No items selected.</p>
+                    <select id="payment-method" class="form-select">
+                        <option value="Cash">Cash</option>
+                        <option value="Card">Card</option>
+                        <option value="UPI">UPI</option>
+                    </select>
+                </div>
+
+                <div id="cart-items">
+                    <p class="text-muted">No items selected.</p>
+                </div>
 
                 <hr>
 
-                <h4>Total ₹0</h4>
+                <h4>
+                    Total :
+                    <span id="cart-total">₹0</span>
+                </h4>
 
-                <button class="btn btn-success w-100 mt-3">
-
-                    Print Bill
-
+                <button class="btn btn-success w-100 mt-3" onclick="saveBill()">
+                    Save Bill
                 </button>
 
             </div>
@@ -90,5 +107,6 @@
     </div>
 
 </div>
+
 
 {% endblock %}

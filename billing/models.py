@@ -28,7 +28,7 @@ class BillItem(models.Model):
 
     item = models.ForeignKey(MenuItem, on_delete=models.CASCADE)
 
-    quantity = models.IntegerField(default=1)
+    quantity = models.PositiveIntegerField(default=1)
 
     price = models.DecimalField(max_digits=10, decimal_places=2)
 

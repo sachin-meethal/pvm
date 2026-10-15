@@ -1,43 +1,143 @@
-<div class="bg-dark text-white vh-100 p-3" style="width:260px;">
+<aside class="pvm-sidebar">
 
-    <h4 class="mb-4">
-        🍽 PVM ERP
-    </h4>
+    <!-- LOGO -->
+    <div class="pvm-logo-area">
 
-    <div class="list-group">
+        <div class="pvm-logo">
+            <i class="bi bi-shop"></i>
+        </div>
 
-        <a href="/" class="list-group-item list-group-item-action">
-            🏠 Dashboard
-        </a>
-
-        <a href="{% url 'pos' %}" class="list-group-item list-group-item-action bg-dark text-white border-0">
-    <i class="bi bi-receipt me-2"></i> POS Billing
-</a>
-
-        <a href="/employees/" class="list-group-item list-group-item-action bg-dark text-white border-0">
-    <i class="bi bi-people me-2"></i> Employees
-</a>
-
-        <a href="#" class="list-group-item list-group-item-action">
-            📅 Attendance
-        </a>
-
-        <a href="#" class="list-group-item list-group-item-action">
-            💰 Salary
-        </a>
-
-        <a href="#" class="list-group-item list-group-item-action">
-            📦 Inventory
-        </a>
-
-        <a href="#" class="list-group-item list-group-item-action">
-            🚚 Purchase
-        </a>
-
-        <a href="#" class="list-group-item list-group-item-action">
-            📊 Reports
-        </a>
+        <div class="pvm-logo-text">
+            <div>PVM</div>
+            <small>Restaurant ERP</small>
+        </div>
 
     </div>
 
-</div>
+
+    <!-- MENU -->
+    <nav class="pvm-menu">
+
+        <div class="pvm-menu-title">
+            MENU
+        </div>
+
+
+        <a href="/"
+           class="pvm-menu-item {% if request.path == '/' %}active{% endif %}">
+
+            <i class="bi bi-grid"></i>
+            <span>Dashboard</span>
+
+        </a>
+
+
+        <a href="/billing/"
+           class="pvm-menu-item {% if request.path == '/billing/' %}active{% endif %}">
+
+            <i class="bi bi-receipt"></i>
+            <span>POS Billing</span>
+
+        </a>
+
+
+        <a href="/employees/"
+           class="pvm-menu-item {% if '/employees/' in request.path %}active{% endif %}">
+
+            <i class="bi bi-people"></i>
+            <span>Employees</span>
+
+        </a>
+
+
+        <a href="#"
+           class="pvm-menu-item">
+
+            <i class="bi bi-calendar-check"></i>
+            <span>Attendance</span>
+
+        </a>
+
+
+        <a href="/salary/"
+           class="pvm-menu-item {% if '/salary/' in request.path %}active{% endif %}">
+
+            <i class="bi bi-wallet2"></i>
+            <span>Salary</span>
+
+        </a>
+
+
+        <a href="#"
+           class="pvm-menu-item">
+
+            <i class="bi bi-box"></i>
+            <span>Inventory</span>
+
+        </a>
+
+
+        <a href="#"
+           class="pvm-menu-item">
+
+            <i class="bi bi-cart3"></i>
+            <span>Purchase</span>
+
+        </a>
+
+
+        <a href="#"
+           class="pvm-menu-item">
+
+            <i class="bi bi-bar-chart"></i>
+            <span>Reports</span>
+
+        </a>
+
+
+        <a href="/billing/history/"
+           class="pvm-menu-item {% if '/billing/history/' in request.path %}active{% endif %}">
+
+            <i class="bi bi-clock-history"></i>
+            <span>Bill History</span>
+
+        </a>
+
+
+        <div class="pvm-menu-title pvm-settings-title">
+            SYSTEM
+        </div>
+
+
+        <a href="#"
+           class="pvm-menu-item">
+
+            <i class="bi bi-gear"></i>
+            <span>Settings</span>
+
+        </a>
+
+    </nav>
+
+
+    <!-- USER / RESTAURANT -->
+    <div class="pvm-sidebar-bottom">
+
+        <div class="pvm-user">
+
+            <div class="pvm-user-icon">
+                <i class="bi bi-person"></i>
+            </div>
+
+            <div class="pvm-user-info">
+                <strong>PVM Restaurant</strong>
+                <small>Management System</small>
+            </div>
+
+            <i class="bi bi-three-dots pvm-more"></i>
+
+        </div>
+
+    </div>
+
+</aside>

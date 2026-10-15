@@ -43,6 +43,49 @@ Dashboard
             </div>
         </div>
     </div>
+    <div class="card mt-4 shadow">
+
+        <div class="card-header">
+            <h4>Today's Bills</h4>
+        </div>
+
+        <div class="card-body">
+
+            <table class="table table-striped">
+
+                <thead>
+                    <tr>
+                        <th>Bill No</th>
+                        <th>Customer</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for bill in today_bills %}
+
+                    <tr>
+                        <td>{{ bill.bill_no }}</td>
+                        <td>{{ bill.customer_name|default:"Walk-in" }}</td>
+                        <td>₹{{ bill.total }}</td>
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+                        <td colspan="3">No sales today.</td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
 
 </div>
 

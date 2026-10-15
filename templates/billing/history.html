@@ -1,0 +1,63 @@
+{% extends "base/base.html" %}
+
+{% block title %}Bill History{% endblock %}
+
+{% block content %}
+
+<div class="card shadow">
+
+    <div class="card-header bg-dark text-white">
+        <h4 class="mb-0">🧾 Bill History</h4>
+    </div>
+
+    <div class="card-body">
+
+        <table class="table table-bordered table-hover">
+
+            <thead class="table-light">
+                <tr>
+                    <th>Bill No</th>
+                    <th>Customer</th>
+                    <th>Payment</th>
+                    <th>Total</th>
+                    <th>Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for bill in bills %}
+
+                <tr>
+                    <td>{{ bill.bill_no }}</td>
+                    <td>{{ bill.customer_name|default:"Walk-in Customer" }}</td>
+                    <td>{{ bill.payment_method }}</td>
+                    <td>₹{{ bill.total }}</td>
+                    <td>{{ bill.created_at }}</td>
+                    <td>
+                        <a href="{% url 'receipt' bill.id %}" class="btn btn-sm btn-primary">
+                            Print
+                        </a>
+                    </td>
+                </tr>
+
+                {% empty %}
+
+                <tr>
+                    <td colspan="5" class="text-center">
+                        No bills found.
+                    </td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}

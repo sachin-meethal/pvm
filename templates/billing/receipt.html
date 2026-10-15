@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Receipt</title>
+</head>
+<body onload="window.print()">
+
+<h2>PVM Restaurant</h2>
+
+<p><strong>Bill No:</strong> {{ bill.bill_no }}</p>
+<p><strong>Customer:</strong> {{ bill.customer_name|default:"Walk-in Customer" }}</p>
+<p><strong>Payment:</strong> {{ bill.payment_method }}</p>
+
+<hr>
+
+<table border="1" width="100%">
+    <tr>
+        <th>Item</th>
+        <th>Qty</th>
+        <th>Price</th>
+        <th>Total</th>
+    </tr>
+
+    {% for item in bill.items.all %}
+    <tr>
+        <td>{{ item.item.name }}</td>
+        <td>{{ item.quantity }}</td>
+        <td>₹{{ item.price }}</td>
+        <td>₹{{ item.total }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<hr>
+
+<h3>Total: ₹{{ bill.total }}</h3>
+
+<p>Thank you. Visit again!</p>
+
+</body>
+</html>

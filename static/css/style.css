@@ -1,12 +1,349 @@
-body{
-    font-family: Arial, sans-serif;
+/* =========================================
+   GLOBAL
+========================================= */
+
+* {
+    box-sizing: border-box;
 }
 
-.list-group-item{
-    border:0;
+html,
+body {
+    margin: 0;
+    padding: 0;
 }
 
-.list-group-item:hover{
-    background:#0d6efd;
-    color:white;
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #f7f8fa;
+    color: #1f2937;
+}
+
+
+/* =========================================
+   PVM SIDEBAR
+========================================= */
+
+.pvm-sidebar {
+    width: 250px;
+    min-width: 250px;
+    height: 100vh;
+
+    background: #ffffff;
+
+    border-right: 1px solid #e5e7eb;
+
+    display: flex;
+    flex-direction: column;
+
+    flex-shrink: 0;
+
+    position: sticky;
+    top: 0;
+}
+
+
+/* =========================================
+   LOGO
+========================================= */
+
+.pvm-logo-area {
+    height: 76px;
+
+    padding: 0 22px;
+
+    display: flex;
+    align-items: center;
+
+    border-bottom: 1px solid #f0f1f3;
+}
+
+
+.pvm-logo {
+    width: 38px;
+    height: 38px;
+
+    border-radius: 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #635bff;
+
+    color: white;
+
+    font-size: 18px;
+
+    margin-right: 11px;
+}
+
+
+.pvm-logo-text {
+    color: #1f2937;
+
+    font-size: 17px;
+
+    font-weight: 700;
+
+    line-height: 18px;
+}
+
+
+.pvm-logo-text small {
+    display: block;
+
+    color: #9ca3af;
+
+    font-size: 10px;
+
+    font-weight: 400;
+
+    margin-top: 3px;
+}
+
+
+/* =========================================
+   MENU
+========================================= */
+
+.pvm-menu {
+    flex: 1;
+
+    padding: 18px 12px;
+
+    overflow-y: auto;
+}
+
+
+.pvm-menu-title {
+    padding: 5px 13px 9px;
+
+    color: #9ca3af;
+
+    font-size: 10px;
+
+    font-weight: 600;
+
+    letter-spacing: 1px;
+}
+
+
+.pvm-settings-title {
+    margin-top: 15px;
+}
+
+
+/* =========================================
+   MENU ITEM
+========================================= */
+
+.pvm-menu-item {
+    height: 44px;
+
+    margin: 3px 0;
+
+    padding: 0 13px;
+
+    border-radius: 9px;
+
+    display: flex;
+    align-items: center;
+
+    text-decoration: none;
+
+    color: #4b5563;
+
+    font-size: 14px;
+
+    font-weight: 500;
+
+    transition: all 0.18s ease;
+}
+
+
+.pvm-menu-item i {
+    width: 22px;
+
+    margin-right: 12px;
+
+    font-size: 17px;
+
+    color: #8b95a1;
+
+    text-align: center;
+}
+
+
+.pvm-menu-item span {
+    flex: 1;
+}
+
+
+/* =========================================
+   HOVER
+========================================= */
+
+.pvm-menu-item:hover {
+    background: #f4f4ff;
+
+    color: #635bff;
+}
+
+
+.pvm-menu-item:hover i {
+    color: #635bff;
+}
+
+
+/* =========================================
+   ACTIVE
+========================================= */
+
+.pvm-menu-item.active {
+    background: #eeecff;
+
+    color: #5549d6;
+
+    font-weight: 600;
+}
+
+
+.pvm-menu-item.active i {
+    color: #635bff;
+}
+
+
+/* Small active indicator */
+
+.pvm-menu-item.active::before {
+    content: "";
+
+    width: 3px;
+
+    height: 24px;
+
+    background: #635bff;
+
+    border-radius: 0 4px 4px 0;
+
+    position: absolute;
+
+    left: 0;
+}
+
+
+/* =========================================
+   SIDEBAR BOTTOM
+========================================= */
+
+.pvm-sidebar-bottom {
+    padding: 12px;
+
+    border-top: 1px solid #f0f1f3;
+}
+
+
+.pvm-user {
+    min-height: 55px;
+
+    padding: 8px 9px;
+
+    border-radius: 10px;
+
+    display: flex;
+    align-items: center;
+
+    background: #f8f9fb;
+}
+
+
+.pvm-user-icon {
+    width: 34px;
+    height: 34px;
+
+    border-radius: 9px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #eeecff;
+
+    color: #635bff;
+
+    font-size: 17px;
+
+    margin-right: 9px;
+}
+
+
+.pvm-user-info {
+    flex: 1;
+
+    min-width: 0;
+}
+
+
+.pvm-user-info strong {
+    display: block;
+
+    color: #374151;
+
+    font-size: 11px;
+
+    font-weight: 600;
+}
+
+
+.pvm-user-info small {
+    display: block;
+
+    color: #9ca3af;
+
+    font-size: 9px;
+
+    margin-top: 2px;
+}
+
+
+.pvm-more {
+    color: #9ca3af;
+
+    font-size: 15px;
+}
+
+
+/* =========================================
+   SCROLLBAR
+========================================= */
+
+.pvm-menu::-webkit-scrollbar {
+    width: 4px;
+}
+
+.pvm-menu::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.pvm-menu::-webkit-scrollbar-thumb {
+    background: #d9dce1;
+
+    border-radius: 10px;
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 768px) {
+
+    .pvm-sidebar {
+        width: 220px;
+        min-width: 220px;
+    }
+
+    .pvm-menu-item {
+        font-size: 13px;
+    }
 }
