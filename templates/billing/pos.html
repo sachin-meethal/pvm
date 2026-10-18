@@ -6,8 +6,8 @@
 
 <div class="row">
 
-    <!-- Left Side -->
-    <div class="col-md-8">
+    <!-- MENU SIDE -->
+    <div class="col-lg-8">
 
         <div class="card shadow">
 
@@ -17,22 +17,71 @@
 
             <div class="card-body">
 
-                <div class="row">
+                <!-- SEARCH -->
+                <div class="mb-3">
+                    <input
+                        type="text"
+                        id="menu-search"
+                        class="form-control form-control-lg"
+                        placeholder="🔍 Search menu item..."
+                        onkeyup="filterMenu()"
+                    >
+                </div>
+
+                <!-- CATEGORY BUTTONS -->
+                <div class="d-flex flex-wrap gap-2 mb-4">
+
+                    <button
+                        type="button"
+                        class="btn btn-primary category-btn"
+                        onclick="selectCategory('all', this)">
+                        All
+                    </button>
+
+                    {% for category in categories %}
+
+                    <button
+                        type="button"
+                        class="btn btn-outline-primary category-btn"
+                        onclick="selectCategory('{{ category.id }}', this)">
+                        {{ category.name }}
+                    </button>
+
+                    {% endfor %}
+
+                </div>
+
+                <!-- MENU ITEMS -->
+                <div class="row" id="menu-items">
 
                     {% for item in items %}
 
-                    <div class="col-md-4 mb-3">
+                    <div
+                        class="col-6 col-md-4 mb-3 menu-item"
+                        data-category="{{ item.category_id }}"
+                        data-name="{{ item.name|lower }}"
+                    >
 
                         <div class="card h-100 shadow-sm">
 
-                            <div class="card-body text-center">
+                            <div class="card-body text-center d-flex flex-column">
 
-                                <h5>{{ item.name }}</h5>
+                                <h5 class="menu-item-name">
+                                    {{ item.name }}
+                                </h5>
 
-                                <h4 class="text-success">₹{{ item.price }}</h4>
+                                <h4 class="text-success mt-auto">
+                                    ₹{{ item.price }}
+                                </h4>
 
-                                <button class="btn btn-primary w-100"
-                                    onclick="addItem({{ item.id }}, '{{ item.name|escapejs }}', {{ item.price }})">
+                                <button
+                                    type="button"
+                                    class="btn btn-primary w-100 mt-2"
+                                    onclick="addItem(
+                                        {{ item.id }},
+                                        '{{ item.name|escapejs }}',
+                                        {{ item.price }}
+                                    )">
                                     Add
                                 </button>
 
@@ -54,15 +103,22 @@
 
                 </div>
 
+                <!-- NO SEARCH RESULT -->
+                <div
+                    id="no-menu-results"
+                    class="alert alert-warning text-center d-none">
+                    No matching menu items found.
+                </div>
+
             </div>
 
         </div>
 
     </div>
 
-    <!-- Right Side -->
 
-    <div class="col-md-4">
+    <!-- CURRENT BILL -->
+    <div class="col-lg-4">
 
         <div class="card shadow">
 
@@ -71,22 +127,48 @@
             </div>
 
             <div class="card-body">
-                <div class="mb-3">
-                    <label class="form-label">Customer Name</label>
-                    <input type="text" class="form-control" id="customer-name" placeholder="Walk-in Customer">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Payment</label>
 
-                    <select id="payment-method" class="form-select">
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Customer Name
+                    </label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="customer-name"
+                        placeholder="Walk-in Customer"
+                    >
+
+                </div>
+
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Payment
+                    </label>
+
+                    <select
+                        id="payment-method"
+                        class="form-select">
+
                         <option value="Cash">Cash</option>
                         <option value="Card">Card</option>
                         <option value="UPI">UPI</option>
+
                     </select>
+
                 </div>
 
+
                 <div id="cart-items">
-                    <p class="text-muted">No items selected.</p>
+
+                    <p class="text-muted">
+                        No items selected.
+                    </p>
+
                 </div>
 
                 <hr>
@@ -96,7 +178,10 @@
                     <span id="cart-total">₹0</span>
                 </h4>
 
-                <button class="btn btn-success w-100 mt-3" onclick="saveBill()">
+                <button
+                    type="button"
+                    class="btn btn-success w-100 mt-3"
+                    onclick="saveBill()">
                     Save Bill
                 </button>
 
@@ -108,5 +193,92 @@
 
 </div>
 
+
+<script>
+
+let selectedCategory = "all";
+
+
+function selectCategory(category, button) {
+
+    selectedCategory = category;
+
+    document.querySelectorAll(".category-btn").forEach(function(btn) {
+
+        btn.classList.remove("btn-primary");
+        btn.classList.add("btn-outline-primary");
+
+    });
+
+    button.classList.remove("btn-outline-primary");
+    button.classList.add("btn-primary");
+
+    filterMenu();
+}
+
+
+function filterMenu() {
+
+    const search =
+        document.getElementById("menu-search")
+        .value
+        .toLowerCase()
+        .trim();
+
+    const items =
+        document.querySelectorAll(".menu-item");
+
+    let visibleCount = 0;
+
+
+    items.forEach(function(item) {
+
+        const name =
+            item.dataset.name.toLowerCase();
+
+        const category =
+            item.dataset.category;
+
+
+        const categoryMatch =
+            selectedCategory === "all" ||
+            category === selectedCategory;
+
+
+        const searchMatch =
+            name.includes(search);
+
+
+        if (categoryMatch && searchMatch) {
+
+            item.style.display = "";
+            visibleCount++;
+
+        } else {
+
+            item.style.display = "none";
+
+        }
+
+    });
+
+
+    const noResults =
+        document.getElementById("no-menu-results");
+
+
+    if (visibleCount === 0 && items.length > 0) {
+
+        noResults.classList.remove("d-none");
+
+    } else {
+
+        noResults.classList.add("d-none");
+
+    }
+
+}
+
+</script>
 
 {% endblock %}
