@@ -1,0 +1,459 @@
+{% extends "base/base.html" %}
+
+{% block content %}
+
+<div class="container-fluid py-3">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h3 class="mb-0">Create Purchase</h3>
+            <small class="text-muted">{{ purchase_no }}</small>
+        </div>
+
+        <a href="{% url 'purchase:list' %}"
+           class="btn btn-outline-secondary">
+            Purchase History
+        </a>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="post" id="purchaseForm">
+        {% csrf_token %}
+
+        <div class="card shadow-sm mb-3">
+            <div class="card-header">
+                <strong>Purchase Information</strong>
+            </div>
+
+            <div class="card-body">
+
+                <div class="row">
+
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Supplier *</label>
+
+                        <select name="supplier"
+                                class="form-select"
+                                required>
+
+                            <option value="">
+                                Select Supplier
+                            </option>
+
+                            {% for supplier in suppliers %}
+                                <option value="{{ supplier.id }}">
+                                    {{ supplier }}
+                                </option>
+                            {% endfor %}
+
+                        </select>
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">Purchase Date *</label>
+
+                        <input type="date"
+                               name="purchase_date"
+                               class="form-control"
+                               value="{{ today|date:'Y-m-d' }}"
+                               required>
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">Invoice No.</label>
+
+                        <input type="text"
+                               name="invoice_no"
+                               class="form-control"
+                               placeholder="Supplier invoice">
+                    </div>
+
+                    <div class="col-md-2 mb-3">
+                        <label class="form-label">Purchase No.</label>
+
+                        <input type="text"
+                               class="form-control"
+                               value="{{ purchase_no }}"
+                               readonly>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="card shadow-sm mb-3">
+
+            <div class="card-header d-flex justify-content-between align-items-center">
+
+                <strong>Purchase Items</strong>
+
+                <button type="button"
+                        class="btn btn-primary btn-sm"
+                        onclick="addItem()">
+                    + Add Item
+                </button>
+
+            </div>
+
+            <div class="card-body">
+
+                <div class="table-responsive">
+
+                    <table class="table table-bordered align-middle"
+                           id="itemsTable">
+
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th width="120">Quantity</th>
+                                <th width="120">Unit</th>
+                                <th width="150">Rate ₹</th>
+                                <th width="150">Total ₹</th>
+                                <th width="70"></th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="itemRows">
+
+                            <tr class="item-row">
+
+                                <td>
+                                    <input type="text"
+                                           name="item_name[]"
+                                           class="form-control"
+                                           placeholder="Chicken / Rice / Oil..."
+                                           required>
+                                </td>
+
+                                <td>
+                                    <input type="number"
+                                           name="quantity[]"
+                                           class="form-control qty"
+                                           min="0.01"
+                                           step="0.01"
+                                           value="1"
+                                           oninput="calculateTotals()"
+                                           required>
+                                </td>
+
+                                <td>
+                                    <select name="unit[]"
+                                            class="form-select">
+
+                                        <option value="Nos">Nos</option>
+                                        <option value="Kg">Kg</option>
+                                        <option value="Gram">Gram</option>
+                                        <option value="Ltr">Ltr</option>
+                                        <option value="Ml">Ml</option>
+                                        <option value="Packet">Packet</option>
+                                        <option value="Box">Box</option>
+                                        <option value="Dozen">Dozen</option>
+
+                                    </select>
+                                </td>
+
+                                <td>
+                                    <input type="number"
+                                           name="rate[]"
+                                           class="form-control rate"
+                                           min="0"
+                                           step="0.01"
+                                           value="0"
+                                           oninput="calculateTotals()"
+                                           required>
+                                </td>
+
+                                <td>
+                                    <input type="text"
+                                           class="form-control line-total"
+                                           value="0.00"
+                                           readonly>
+                                </td>
+
+                                <td class="text-center">
+                                    <button type="button"
+                                            class="btn btn-danger btn-sm"
+                                            onclick="removeItem(this)">
+                                        ×
+                                    </button>
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="row">
+
+            <div class="col-lg-7">
+
+                <div class="card shadow-sm mb-3">
+
+                    <div class="card-header">
+                        <strong>Payment</strong>
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label">
+                                    Payment Method
+                                </label>
+
+                                <select name="payment_method"
+                                        class="form-select">
+
+                                    <option value="Cash">Cash</option>
+                                    <option value="UPI">UPI</option>
+                                    <option value="Bank">Bank</option>
+                                    <option value="Credit">Credit</option>
+
+                                </select>
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label">
+                                    Paid Amount ₹
+                                </label>
+
+                                <input type="number"
+                                       name="paid_amount"
+                                       class="form-control"
+                                       value="0"
+                                       min="0"
+                                       step="0.01">
+
+                            </div>
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Notes
+                            </label>
+
+                            <textarea name="notes"
+                                      class="form-control"
+                                      rows="3"
+                                      placeholder="Optional notes"></textarea>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-lg-5">
+
+                <div class="card shadow-sm mb-3">
+
+                    <div class="card-header">
+                        <strong>Purchase Total</strong>
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Subtotal ₹
+                            </label>
+
+                            <input type="text"
+                                   id="subtotalDisplay"
+                                   class="form-control"
+                                   value="0.00"
+                                   readonly>
+
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-6 mb-3">
+
+                                <label class="form-label">
+                                    Discount ₹
+                                </label>
+
+                                <input type="number"
+                                       name="discount"
+                                       id="discount"
+                                       class="form-control"
+                                       value="0"
+                                       min="0"
+                                       step="0.01"
+                                       oninput="calculateTotals()">
+
+                            </div>
+
+                            <div class="col-6 mb-3">
+
+                                <label class="form-label">
+                                    Tax ₹
+                                </label>
+
+                                <input type="number"
+                                       name="tax"
+                                       id="tax"
+                                       class="form-control"
+                                       value="0"
+                                       min="0"
+                                       step="0.01"
+                                       oninput="calculateTotals()">
+
+                            </div>
+
+                        </div>
+
+                        <hr>
+
+                        <div class="d-flex justify-content-between">
+                            <h4>Grand Total</h4>
+                            <h4>
+                                ₹<span id="grandTotal">0.00</span>
+                            </h4>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="text-end mb-5">
+
+            <button type="submit"
+                    class="btn btn-success btn-lg px-5">
+
+                Save Purchase
+
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
+
+
+<script>
+
+function addItem() {
+
+    const tbody = document.getElementById("itemRows");
+
+    const firstRow = tbody.querySelector(".item-row");
+
+    const newRow = firstRow.cloneNode(true);
+
+    newRow.querySelector('[name="item_name[]"]').value = "";
+    newRow.querySelector('[name="quantity[]"]').value = "1";
+    newRow.querySelector('[name="rate[]"]').value = "0";
+    newRow.querySelector(".line-total").value = "0.00";
+
+    tbody.appendChild(newRow);
+
+    calculateTotals();
+}
+
+
+function removeItem(button) {
+
+    const rows = document.querySelectorAll(".item-row");
+
+    if (rows.length <= 1) {
+        alert("At least one item is required.");
+        return;
+    }
+
+    button.closest("tr").remove();
+
+    calculateTotals();
+}
+
+
+function calculateTotals() {
+
+    let subtotal = 0;
+
+    document.querySelectorAll(".item-row").forEach(function(row) {
+
+        const qty =
+            parseFloat(row.querySelector(".qty").value) || 0;
+
+        const rate =
+            parseFloat(row.querySelector(".rate").value) || 0;
+
+        const total = qty * rate;
+
+        row.querySelector(".line-total").value =
+            total.toFixed(2);
+
+        subtotal += total;
+
+    });
+
+
+    const discount =
+        parseFloat(
+            document.getElementById("discount").value
+        ) || 0;
+
+    const tax =
+        parseFloat(
+            document.getElementById("tax").value
+        ) || 0;
+
+
+    let grandTotal =
+        subtotal + tax - discount;
+
+    if (grandTotal < 0) {
+        grandTotal = 0;
+    }
+
+
+    document.getElementById("subtotalDisplay").value =
+        subtotal.toFixed(2);
+
+    document.getElementById("grandTotal").textContent =
+        grandTotal.toFixed(2);
+}
+
+
+document.addEventListener(
+    "DOMContentLoaded",
+    calculateTotals
+);
+
+</script>
+
+{% endblock %}
