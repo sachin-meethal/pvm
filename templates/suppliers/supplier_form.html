@@ -1,0 +1,208 @@
+{% extends "base/base.html" %}
+
+{% block content %}
+
+<div class="container-fluid py-3">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+
+        <div>
+            {% if supplier %}
+                <h3 class="mb-0">Edit Supplier</h3>
+                <small class="text-muted">
+                    {{ supplier.name }}
+                </small>
+            {% else %}
+                <h3 class="mb-0">Add Supplier</h3>
+                <small class="text-muted">
+                    Create a new supplier
+                </small>
+            {% endif %}
+        </div>
+
+        <a href="{% url 'suppliers:list' %}"
+           class="btn btn-outline-secondary">
+            Supplier List
+        </a>
+
+    </div>
+
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+
+    <div class="card shadow-sm">
+
+        <div class="card-header">
+            <strong>Supplier Information</strong>
+        </div>
+
+        <div class="card-body">
+
+            <form method="post">
+
+                {% csrf_token %}
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label">
+                            Supplier Name *
+                        </label>
+
+                        <input type="text"
+                               name="name"
+                               class="form-control"
+                               value="{{ supplier.name|default:'' }}"
+                               required>
+
+                    </div>
+
+
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label">
+                            Company Name
+                        </label>
+
+                        <input type="text"
+                               name="company_name"
+                               class="form-control"
+                               value="{{ supplier.company_name|default:'' }}">
+
+                    </div>
+
+
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label">
+                            Phone *
+                        </label>
+
+                        <input type="text"
+                               name="phone"
+                               class="form-control"
+                               value="{{ supplier.phone|default:'' }}"
+                               required>
+
+                    </div>
+
+
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label">
+                            Email
+                        </label>
+
+                        <input type="email"
+                               name="email"
+                               class="form-control"
+                               value="{{ supplier.email|default:'' }}">
+
+                    </div>
+
+
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label">
+                            GST Number
+                        </label>
+
+                        <input type="text"
+                               name="gst_number"
+                               class="form-control"
+                               value="{{ supplier.gst_number|default:'' }}">
+
+                    </div>
+
+
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label">
+                            Opening Balance ₹
+                        </label>
+
+                        <input type="number"
+                               name="opening_balance"
+                               class="form-control"
+                               step="0.01"
+                               value="{{ supplier.opening_balance|default:'0' }}">
+
+                    </div>
+
+
+                    <div class="col-12 mb-3">
+
+                        <label class="form-label">
+                            Address
+                        </label>
+
+                        <textarea name="address"
+                                  class="form-control"
+                                  rows="3">{{ supplier.address|default:'' }}</textarea>
+
+                    </div>
+
+
+                    {% if supplier %}
+
+                    <div class="col-12 mb-3">
+
+                        <div class="form-check">
+
+                            <input type="checkbox"
+                                   name="active"
+                                   class="form-check-input"
+                                   id="activeSupplier"
+                                   {% if supplier.active %}checked{% endif %}>
+
+                            <label class="form-check-label"
+                                   for="activeSupplier">
+                                Active Supplier
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <div class="text-end">
+
+                    <a href="{% url 'suppliers:list' %}"
+                       class="btn btn-secondary">
+                        Cancel
+                    </a>
+
+                    <button type="submit"
+                            class="btn btn-success px-4">
+
+                        {% if supplier %}
+                            Update Supplier
+                        {% else %}
+                            Save Supplier
+                        {% endif %}
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
