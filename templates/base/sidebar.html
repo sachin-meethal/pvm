@@ -85,12 +85,12 @@
         </li>
 
 
-        <a href="/suppliers/" class="pvm-menu-item">
-
-            <i class="bi bi-bar-chart"></i>
-            <span>Reports</span>
-
-        </a>
+        <li class="nav-item">
+            <a href="{% url 'suppliers:list' %}" class="nav-link">
+                <i class="nav-icon fas fa-truck"></i>
+                <p>Suppliers</p>
+            </a>
+        </li>
 
 
         <a href="/billing/history/" class="pvm-menu-item {% if '/billing/history/' in request.path %}active{% endif %}">
